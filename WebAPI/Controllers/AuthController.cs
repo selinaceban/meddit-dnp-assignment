@@ -11,6 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 namespace WebApi.Controllers;
 
 [ApiController]
+
 [Route("[controller]")]
 public class AuthController : ControllerBase
 {
@@ -24,7 +25,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost, Route("register")]
-    public async Task<ActionResult> Register([FromBody]UserCreationDto dto)
+    public async Task<ActionResult> Register(UserCreationDto dto)
     {
         await authLogic.RegisterUserAsync(dto);
         return Ok();

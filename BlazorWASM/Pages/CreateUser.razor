@@ -1,7 +1,8 @@
 ﻿@page "/CreateUser"
-@using Domain.DTOs
 @using HttpClients.ClientInterfaces
-@inject IUserService userService;
+@using Domain.DTOs
+@using BlazorWasm.Services
+@inject IAuthService AuthService
 
 <div class="card">
     <h3>Create User</h3>
@@ -12,19 +13,24 @@
         {
             <label style="color: @color">@resultMsg</label>
         }
-         <label>Email:</label>
-                <input type="text" @bind="email" @bind:event="oninput"/>
-                @if (!string.IsNullOrEmpty(resultMsg))
-                {
-                    <label style="color: @color">@resultMsg</label>
-                }
-         <label>Password:</label>
+        <div class="form-group field">
+            <label>Email:</label>
+            <input type="text" @bind="email" @bind:event="oninput"/>
+            @if (!string.IsNullOrEmpty(resultMsg))
+            {
+                <label style="color: @color">@resultMsg</label>
+            }
+            <div class="form-group field">
+                <label>Password:</label>
                 <input type="text" @bind="password" @bind:event="oninput"/>
                 @if (!string.IsNullOrEmpty(resultMsg))
                 {
                     <label style="color: @color">@resultMsg</label>
                 }
+            </div>
+        </div>
     </div>
+   
     <div class="button-row">
         <button @onclick="Create" disabled="@(string.IsNullOrEmpty(username))" class="acceptbtn">Create</button>
     </div>
@@ -36,14 +42,14 @@
     private string password = "";
     private string resultMsg = "";
     private string color = "";
-    
+
     private async Task Create()
     {
         resultMsg = "";
 
         try
         {
-            await userService.Create(new UserCreationDto(username, email, password));
+            await AuthService.RegisterAsync(new UserCreationDto(username, email, password));
             username = "";
             email = "";
             password = "";
@@ -57,4 +63,5 @@
             color = "red";
         }
     }
+
 }

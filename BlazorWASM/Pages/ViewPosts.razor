@@ -68,7 +68,7 @@ else
                 <td>@item.Author.UserName</td>
                 <td>@item.Title</td>
                 <td>
-                    <FancyCheckBox IsPosted="@item.IsPosted" OnChange="@((status) => CompletePost(item, status))"/>
+                    <FancyCheckBox OnChange="@((status) => CompletePost(item, status))"/>
                 </td>
                 <td>
                     <img src="icons/edit.gif" class="funnel" @onclick="@(() => navMgr.NavigateTo($"/EditPost/{item.Id}"))"/>

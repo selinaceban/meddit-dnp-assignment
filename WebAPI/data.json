@@ -47,7 +47,68 @@
       "UserName": "hotaru",
       "Email": "hotaru@mail.ru",
       "Password": "yang"
+    },
+    {
+      "Id": 9,
+      "UserName": "string",
+      "Email": "string",
+      "Password": "string"
+    },
+    {
+      "Id": 10,
+      "UserName": "foooo",
+      "Email": null,
+      "Password": null
+    },
+    {
+      "Id": 11,
+      "UserName": "abc",
+      "Email": null,
+      "Password": null
+    },
+    {
+      "Id": 12,
+      "UserName": "qwerty",
+      "Email": null,
+      "Password": null
+    },
+    {
+      "Id": 13,
+      "UserName": "fgg",
+      "Email": null,
+      "Password": null
+    },
+    {
+      "Id": 14,
+      "UserName": "sdkjl",
+      "Email": null,
+      "Password": null
+    },
+    {
+      "Id": 15,
+      "UserName": "yyyyy",
+      "Email": null,
+      "Password": null
+    },
+    {
+      "Id": 16,
+      "UserName": "opop",
+      "Email": "pppp",
+      "Password": "oooo"
     }
   ],
-  "Posts": null
+  "Posts": [
+    {
+      "Id": 1,
+      "Author": {
+        "Id": 1,
+        "UserName": "meow",
+        "Email": null,
+        "Password": null
+      },
+      "Title": "foo",
+      "Content": "",
+      "IsPosted": true
+    }
+  ]
 }

@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Json;
+using System.Text;
 using System.Text.Json;
 using Domain.DTOs;
 using Domain.Models;
@@ -32,7 +33,9 @@ public class UserHttpClient : IUserService
 
     public async Task<User> CreateAsync(UserCreationDto dto)
     {
-        var response = await client.PostAsJsonAsync("/users", dto);
+        string userAsJson = JsonSerializer.Serialize(dto);
+        StringContent content = new(userAsJson, Encoding.UTF8, "application/json");
+        var response = await client.PostAsJsonAsync("/users", content);
         var result = await response.Content.ReadAsStringAsync();
         if (!response.IsSuccessStatusCode)
         {

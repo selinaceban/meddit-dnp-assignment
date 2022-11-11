@@ -11,9 +11,4 @@ public class UserLoginDto
         UserName = userName;
         Password = password;
     }
-
-    public UserLoginDto()
-    {
-        throw new NotImplementedException();
-    }
 }
