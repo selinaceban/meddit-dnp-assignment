@@ -25,12 +25,7 @@
              <label>Content:</label>
                         <input type="text" @bind="postContent"/>
         </div>
-        <div class="form-group field">
-            <label>Author:</label>
-            <p @bind="authorId">
-                AuthorId
-            </p>
-        </div>
+    
         <div class="button-row">
             @if (!string.IsNullOrEmpty(msg))
             {
@@ -73,11 +68,6 @@
     private async Task Create()
     {
         msg = "";
-        if (authorId == null)
-        {
-            msg = "You must login an assignee!";
-            return;
-        }
         if (string.IsNullOrEmpty(postTitle))
         {
             msg = "Title cannot be empty!";
@@ -91,7 +81,7 @@
 
         try
         {
-            PostCreationDto dto = new((int)authorId, postTitle, postContent);
+            PostCreationDto dto = new(postTitle, postContent);
             await postService.CreateAsync(dto);
             showModal = true;
         }

@@ -7,9 +7,8 @@ public class PostCreationDto
     
     public string Content { get; }
 
-    public PostCreationDto(int authorId, string title, string content)
+    public PostCreationDto(string title, string content)
     {
-        AuthorId = authorId;
         Title = title;
         Content = content;
     }

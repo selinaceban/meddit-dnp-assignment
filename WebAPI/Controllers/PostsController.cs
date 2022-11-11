@@ -49,35 +49,6 @@ public class PostsController : ControllerBase
         }
     }
 
-    [HttpPatch]
-    public async Task<ActionResult> UpdateAsync([FromBody] PostUpdateDto dto)
-    {
-        try
-        {
-            await postLogic.UpdateAsync(dto);
-            return Ok();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            return StatusCode(500, e.Message);
-        }
-    }
-
-    [HttpDelete("{id:int}")]
-    public async Task<ActionResult> DeleteAsync([FromRoute] int id)
-    {
-        try
-        {
-            await postLogic.DeleteAsync(id);
-            return Ok();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            return StatusCode(500, e.Message);
-        }
-    }
 
     [HttpGet("{id:int}")]
     public async Task<ActionResult<PostBasicDto>> GetById([FromRoute] int id)
@@ -93,5 +64,6 @@ public class PostsController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+    
 
 }
