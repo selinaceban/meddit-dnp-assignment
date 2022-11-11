@@ -1,0 +1,153 @@
+﻿@page "/ViewPosts"
+@using Domain.Models
+@using HttpClients.ClientInterfaces
+@using UIComponents
+@using Domain.DTOs
+@inject IPostService postService
+@inject NavigationManager navMgr
+
+<h3>Posts</h3>
+<div class="filter-bar">
+    <div class="filters-container">
+        <img src="icons/@(doShowFilters ? "clear_" : "")funnel.png" class="funnel" @onclick="@(() => doShowFilters = !doShowFilters)" alt="Funnel"/>
+        @if (doShowFilters)
+        {
+            <div class="filter">
+                <label>Username:</label>
+                <input type="text" @bind="usernameFilter"/>
+            </div>
+            <div class="filter">
+                <label>User id:</label>
+                <input type="number" @bind="userIdFilter"/>
+            </div>
+            <div class="filter">
+                <label>Is completed?</label>
+                <select @bind="completedStatusFilter">
+                    <option value="all">All</option>
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+            </div>
+            <div class="filter">
+                <label>Title contains:</label>
+                <input type="text" @bind="titleContainsFilter"/>
+            </div>
+        }
+    </div>
+</div>
+
+<div>
+    <button @onclick="LoadPosts">Load</button>
+</div>
+
+@if (posts == null)
+{
+}
+else if (!posts.Any())
+{
+    <p>No Posts to display</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Post ID</th>
+            <th>Author ID</th>
+            <th>Title</th>
+            <th>Posted?</th>
+            <th>Edit</th>
+            <th>Delete?</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in posts)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Author.UserName</td>
+                <td>@item.Title</td>
+                <td>
+                    <FancyCheckBox IsPosted="@item.IsPosted" OnChange="@((status) => CompletePost(item, status))"/>
+                </td>
+                <td>
+                    <img src="icons/edit.gif" class="funnel" @onclick="@(() => navMgr.NavigateTo($"/EditPost/{item.Id}"))"/>
+                </td>
+                <td>
+                    <label @onclick="@(() => RemovePost(item.Id))" style="cursor:pointer; color: red; font-weight: bold">
+                        &#x2717;
+                    </label>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+@if (!string.IsNullOrEmpty(msg))
+{
+    <label style="color: red">@msg</label>
+}
+
+@code {
+    private IEnumerable<Post>? posts;
+    private string msg = "";
+    private bool doShowFilters = false;
+
+    private string? usernameFilter;
+    private int? userIdFilter;
+    private string? completedStatusFilter;
+    private string? titleContainsFilter;
+
+    private async Task LoadPosts()
+    {
+        try
+        {
+            bool? completedFilterValue = null;
+            if (!string.IsNullOrEmpty(completedStatusFilter) && !completedStatusFilter.Equals("all"))
+            {
+                completedFilterValue = bool.Parse(completedStatusFilter);
+            }
+            posts = await postService.GetAsync(usernameFilter, userIdFilter, completedFilterValue, titleContainsFilter);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            msg = e.Message;
+        }
+    }
+
+    private async Task CompletePost(Post item, bool status)
+    {
+        PostUpdateDto dto = new(item.Id)
+        {
+            IsPosted = status
+        };
+        try
+        {
+            await postService.UpdateAsync(dto);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            msg = e.Message;
+        }
+    }
+
+    private async Task RemovePost(int postId)
+    {
+        msg = "";
+        try
+        {
+            await postService.DeleteAsync(postId);
+            
+            var list = new List<Post>(posts!);
+            list.RemoveAll(post => post.Id == postId);
+            posts = list.AsEnumerable();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            msg = e.Message;
+        }
+    }
+}

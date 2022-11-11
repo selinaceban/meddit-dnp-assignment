@@ -1,0 +1,53 @@
+{
+  "Users": [
+    {
+      "Id": 1,
+      "UserName": "meow",
+      "Email": null,
+      "Password": null
+    },
+    {
+      "Id": 2,
+      "UserName": "puppycat",
+      "Email": null,
+      "Password": null
+    },
+    {
+      "Id": 3,
+      "UserName": "pupper",
+      "Email": null,
+      "Password": null
+    },
+    {
+      "Id": 4,
+      "UserName": "doggo",
+      "Email": null,
+      "Password": null
+    },
+    {
+      "Id": 5,
+      "UserName": "rabbit",
+      "Email": null,
+      "Password": null
+    },
+    {
+      "Id": 6,
+      "UserName": "meowmeow",
+      "Email": null,
+      "Password": null
+    },
+    {
+      "Id": 7,
+      "UserName": "mikolaj",
+      "Email": "meow@gmail.com",
+      "Password": "meowmeow"
+    },
+    {
+      "Id": 8,
+      "UserName": "hotaru",
+      "Email": "hotaru@mail.ru",
+      "Password": "yang"
+    }
+  ],
+  "Posts": null
+}

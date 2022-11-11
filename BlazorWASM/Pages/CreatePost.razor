@@ -1,0 +1,111 @@
+﻿@page "/CreatePost"
+@using HttpClients.ClientInterfaces
+@using Domain.Models
+@using Domain.DTOs
+@using UIComponents
+@inject IUserService userService
+@inject IPostService postService
+@inject NavigationManager navMgr
+
+<div class="card">
+    @if (users == null)
+    {
+        <label>Loading users...</label>
+    }
+    else if (!users.Any())
+    {
+        <label>No users, you cannot create a Post</label>
+    }
+    else
+    {
+        <h3>Create Post</h3>
+        <div class="form-group field">
+            <label>Title:</label>
+            <input type="text" @bind="postTitle"/>
+             <label>Content:</label>
+                        <input type="text" @bind="postContent"/>
+        </div>
+        <div class="form-group field">
+            <label>Author:</label>
+            <p @bind="authorId">
+                AuthorId
+            </p>
+        </div>
+        <div class="button-row">
+            @if (!string.IsNullOrEmpty(msg))
+            {
+                <label style="color: red">@msg</label>
+            }
+            <button @onclick="Create" class="acceptbtn">Create</button>
+        </div>
+    }
+</div>
+
+<Modal ShowModal="showModal">
+    <p>You have successfully added a new Post.</p>
+    <button @onclick="@Proceed">Great</button>
+</Modal>
+
+@code {
+    private IEnumerable<User>? users;
+    private int? authorId;
+    private string postTitle = "";
+    private string postContent = "";
+
+    private string msg = "";
+
+    private bool showModal;
+
+    protected override async Task OnInitializedAsync()
+    {
+        msg = "";
+        try
+        {
+            users = await userService.GetUsers();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            msg = e.Message;
+        }
+    }
+
+    private async Task Create()
+    {
+        msg = "";
+        if (authorId == null)
+        {
+            msg = "You must login an assignee!";
+            return;
+        }
+        if (string.IsNullOrEmpty(postTitle))
+        {
+            msg = "Title cannot be empty!";
+            return;
+        }
+        if (string.IsNullOrEmpty(postContent))
+        {
+            msg = "Content cannot be empty!";
+            return;
+        }
+
+        try
+        {
+            PostCreationDto dto = new((int)authorId, postTitle, postContent);
+            await postService.CreateAsync(dto);
+            showModal = true;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            msg = e.Message;
+        }
+    }
+
+    private void Proceed()
+    {
+        showModal = false;
+        navMgr.NavigateTo("/ViewPosts");
+    }
+
+}
