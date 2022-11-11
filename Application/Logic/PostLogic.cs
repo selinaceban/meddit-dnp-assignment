@@ -36,62 +36,7 @@ public class PostLogic : IPostLogic
     {
         return postDao.GetAsync(searchParameters);
     }
-
-    public async Task UpdateAsync(PostUpdateDto dto)
-    {
-        Post? existing = await postDao.GetByIdAsync(dto.Id);
-
-        if (existing == null)
-        {
-            throw new Exception($"Post with ID {dto.Id} not found!");
-        }
-
-        User? user = null;
-        if (dto.AuthorId != null)
-        {
-            user = await userDao.GetByIdAsync((int)dto.AuthorId);
-            if (user == null)
-            {
-                throw new Exception($"User with id {dto.AuthorId} was not found.");
-            }
-        }
-
-        if (dto.IsPosted != null && existing.IsPosted && !(bool)dto.IsPosted)
-        {
-            throw new Exception("Cannot un-complete a completed Post");
-        }
-
-        User userToUse = user ?? existing.Author;
-        string titleToUse = dto.Title ?? existing.Title;
-        bool completedToUse = dto.IsPosted ?? existing.IsPosted;
-        
-        Post updated = new (userToUse, titleToUse, "")
-        {
-            IsPosted = completedToUse,
-            Id = existing.Id,
-        };
-
-        ValidatePost(updated);
-
-        await postDao.UpdateAsync(updated);
-    }
-
-    public async Task DeleteAsync(int id)
-    {
-        Post? post = await postDao.GetByIdAsync(id);
-        if (post == null)
-        {
-            throw new Exception($"Post with ID {id} was not found!");
-        }
-
-        if (!post.IsPosted)
-        {
-            throw new Exception("Cannot delete un-completed Post!");
-        }
-
-        await postDao.DeleteAsync(id);
-    }
-
+    
     public async Task<PostBasicDto> GetByIdAsync(int id)
     {
         Post? post = await postDao.GetByIdAsync(id);
@@ -101,6 +46,12 @@ public class PostLogic : IPostLogic
         }
 
         return new PostBasicDto(post.Id, post.Author.UserName, post.Title, post.IsPosted);
+    }
+
+    public async Task<Post> ViewAsync(int id)
+    {
+        return await postDao.GetByIdAsync(id);
+
     }
 
     private void ValidatePost(Post dto)

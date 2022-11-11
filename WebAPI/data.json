@@ -95,6 +95,18 @@
       "UserName": "opop",
       "Email": "pppp",
       "Password": "oooo"
+    },
+    {
+      "Id": 17,
+      "UserName": "lastone",
+      "Email": "lastone@gmail.com",
+      "Password": "lalala"
+    },
+    {
+      "Id": 18,
+      "UserName": "can",
+      "Email": "this",
+      "Password": "work"
     }
   ],
   "Posts": [

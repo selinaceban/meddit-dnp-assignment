@@ -21,14 +21,6 @@
                 <input type="number" @bind="userIdFilter"/>
             </div>
             <div class="filter">
-                <label>Is completed?</label>
-                <select @bind="completedStatusFilter">
-                    <option value="all">All</option>
-                    <option value="true">Yes</option>
-                    <option value="false">No</option>
-                </select>
-            </div>
-            <div class="filter">
                 <label>Title contains:</label>
                 <input type="text" @bind="titleContainsFilter"/>
             </div>
@@ -55,9 +47,6 @@ else
             <th>Post ID</th>
             <th>Author ID</th>
             <th>Title</th>
-            <th>Posted?</th>
-            <th>Edit</th>
-            <th>Delete?</th>
         </tr>
         </thead>
         <tbody>
@@ -66,18 +55,7 @@ else
             <tr>
                 <td>@item.Id</td>
                 <td>@item.Author.UserName</td>
-                <td>@item.Title</td>
-                <td>
-                    <FancyCheckBox OnChange="@((status) => CompletePost(item, status))"/>
-                </td>
-                <td>
-                    <img src="icons/edit.gif" class="funnel" @onclick="@(() => navMgr.NavigateTo($"/EditPost/{item.Id}"))"/>
-                </td>
-                <td>
-                    <label @onclick="@(() => RemovePost(item.Id))" style="cursor:pointer; color: red; font-weight: bold">
-                        &#x2717;
-                    </label>
-                </td>
+                <td ><button onclick="@GoToPost">@item.Title</button></td>
             </tr>
         }
         </tbody>
@@ -95,19 +73,13 @@ else
 
     private string? usernameFilter;
     private int? userIdFilter;
-    private string? completedStatusFilter;
     private string? titleContainsFilter;
 
     private async Task LoadPosts()
     {
         try
         {
-            bool? completedFilterValue = null;
-            if (!string.IsNullOrEmpty(completedStatusFilter) && !completedStatusFilter.Equals("all"))
-            {
-                completedFilterValue = bool.Parse(completedStatusFilter);
-            }
-            posts = await postService.GetAsync(usernameFilter, userIdFilter, completedFilterValue, titleContainsFilter);
+            posts = await postService.GetAsync(usernameFilter, userIdFilter, titleContainsFilter);
         }
         catch (Exception e)
         {
@@ -116,38 +88,11 @@ else
         }
     }
 
-    private async Task CompletePost(Post item, bool status)
+    private void GoToPost()
     {
-        PostUpdateDto dto = new(item.Id)
-        {
-            IsPosted = status
-        };
-        try
-        {
-            await postService.UpdateAsync(dto);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            msg = e.Message;
-        }
+        
+        
+        navMgr.NavigateTo("$/posts/{id}");
     }
 
-    private async Task RemovePost(int postId)
-    {
-        msg = "";
-        try
-        {
-            await postService.DeleteAsync(postId);
-            
-            var list = new List<Post>(posts!);
-            list.RemoveAll(post => post.Id == postId);
-            posts = list.AsEnumerable();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            msg = e.Message;
-        }
-    }
 }
