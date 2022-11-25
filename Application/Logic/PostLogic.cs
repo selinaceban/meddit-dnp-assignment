@@ -18,17 +18,14 @@ public class PostLogic : IPostLogic
 
     public async Task<Post> CreateAsync(PostCreationDto dto)
     {
-        User? user = await userDao.GetByIdAsync(dto.AuthorId);
-        if (user == null)
-        {
-            throw new Exception($"User with id {dto.AuthorId} was not found.");
-        }
+        var user = await userDao.GetByIdAsync(dto.AuthorId);
+        if (user == null) throw new Exception($"User with id {dto.AuthorId} was not found.");
 
-        Post post = new Post(user, dto.Title, dto.Content);
+        var post = new Post(user, dto.Title, dto.Content);
 
         ValidatePost(post);
 
-        Post created = await postDao.CreateAsync(post);
+        var created = await postDao.CreateAsync(post);
         return created;
     }
 
@@ -36,14 +33,11 @@ public class PostLogic : IPostLogic
     {
         return postDao.GetAsync(searchParameters);
     }
-    
+
     public async Task<PostBasicDto> GetByIdAsync(int id)
     {
-        Post? post = await postDao.GetByIdAsync(id);
-        if (post == null)
-        {
-            throw new Exception($"Post with id {id} not found");
-        }
+        var post = await postDao.GetByIdAsync(id);
+        if (post == null) throw new Exception($"Post with id {id} not found");
 
         return new PostBasicDto(post.Id, post.Author.UserName, post.Title, post.IsPosted);
     }
@@ -51,7 +45,6 @@ public class PostLogic : IPostLogic
     public async Task<Post> ViewAsync(int id)
     {
         return await postDao.GetByIdAsync(id);
-
     }
 
     private void ValidatePost(Post dto)

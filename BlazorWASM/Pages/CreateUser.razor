@@ -1,7 +1,6 @@
 ﻿@page "/CreateUser"
-@using HttpClients.ClientInterfaces
-@using Domain.DTOs
 @using BlazorWasm.Services
+@using Domain.DTOs
 @inject IAuthService AuthService
 
 <div class="card">
@@ -30,7 +29,7 @@
             </div>
         </div>
     </div>
-   
+
     <div class="button-row">
         <button @onclick="Create" disabled="@(string.IsNullOrEmpty(username))" class="acceptbtn">Create</button>
     </div>

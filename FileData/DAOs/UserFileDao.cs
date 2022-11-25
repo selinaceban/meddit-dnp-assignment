@@ -1,6 +1,7 @@
 ﻿using Application.DaoInterfaces;
 using Domain.DTOs;
 using Domain.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace FileData.DAOs;
 
@@ -15,7 +16,7 @@ public class UserFileDao : IUserDao
 
     public Task<User> CreateAsync(User user)
     {
-        int userId = 1;
+        var userId = 1;
         if (context.Users.Any())
         {
             userId = context.Users.Max(u => u.Id);
@@ -32,26 +33,26 @@ public class UserFileDao : IUserDao
 
     public Task<User?> GetByUsernameAsync(string userName)
     {
-        User? existing = context.Users.FirstOrDefault(u =>
+        var existing = context.Users.FirstOrDefault(u =>
             u.UserName.Equals(userName, StringComparison.OrdinalIgnoreCase)
         );
         return Task.FromResult(existing);
     }
 
-    public Task<IEnumerable<User>> GetAsync(SearchUserParametersDto searchParameters)
+    public async Task<IEnumerable<User>> GetAsync(SearchUserParametersDto searchParameters)
     {
-        IEnumerable<User> users = context.Users.AsEnumerable();
+        var usersQuery = context.Users.AsQueryable();
         if (searchParameters.UsernameContains != null)
-        {
-            users = context.Users.Where(u => u.UserName.Contains(searchParameters.UsernameContains, StringComparison.OrdinalIgnoreCase));
-        }
+            usersQuery = usersQuery.Where(u =>
+                u.UserName.ToLower().Contains(searchParameters.UsernameContains.ToLower()));
 
-        return Task.FromResult(users);
+        IEnumerable<User> result = await usersQuery.ToListAsync();
+        return result;
     }
 
     public Task<User?> GetByIdAsync(int id)
     {
-        User? existing = context.Users.FirstOrDefault(u =>
+        var existing = context.Users.FirstOrDefault(u =>
             u.Id == id
         );
         return Task.FromResult(existing);

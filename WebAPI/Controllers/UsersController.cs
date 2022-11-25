@@ -21,7 +21,7 @@ public class UsersController : ControllerBase
     {
         try
         {
-            User user = await userLogic.CreateAsync(dto);
+            var user = await userLogic.CreateAsync(dto);
             return Created($"/users/{user.Id}", user);
         }
         catch (Exception e)
@@ -37,7 +37,7 @@ public class UsersController : ControllerBase
         try
         {
             SearchUserParametersDto parameters = new(username);
-            IEnumerable<User> users = await userLogic.GetAsync(parameters);
+            var users = await userLogic.GetAsync(parameters);
             return Ok(users);
         }
         catch (Exception e)

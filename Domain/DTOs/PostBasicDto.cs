@@ -2,11 +2,6 @@
 
 public class PostBasicDto
 {
-    public int Id { get; }
-    public string AuthorName { get; }
-    public string Title { get; }
-    public bool IsCompleted { get;  }
-
     public PostBasicDto(int id, string authorName, string title, bool isCompleted)
     {
         Id = id;
@@ -14,4 +9,9 @@ public class PostBasicDto
         Title = title;
         IsCompleted = isCompleted;
     }
+
+    public int Id { get; }
+    public string AuthorName { get; }
+    public string Title { get; }
+    public bool IsCompleted { get; }
 }

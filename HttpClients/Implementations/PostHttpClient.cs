@@ -1,5 +1,4 @@
 ﻿using System.Net.Http.Json;
-
 using System.Text.Json;
 using Domain.DTOs;
 using Domain.Models;
@@ -19,44 +18,37 @@ public class PostHttpClient : IPostService
 
     public async Task CreateAsync(PostCreationDto dto)
     {
-        HttpResponseMessage response = await client.PostAsJsonAsync("/posts", dto);
+        var response = await client.PostAsJsonAsync("/posts", dto);
         if (!response.IsSuccessStatusCode)
         {
-            string content = await response.Content.ReadAsStringAsync();
+            var content = await response.Content.ReadAsStringAsync();
             throw new Exception(content);
         }
     }
 
     public async Task<ICollection<Post>> GetAsync(string? userName, int? userId, string? titleContains)
     {
-        string query = ConstructQuery(userName, userId, titleContains);
+        var query = ConstructQuery(userName, userId, titleContains);
 
-        HttpResponseMessage response = await client.GetAsync("/posts" + query);
-        string content = await response.Content.ReadAsStringAsync();
-        if (!response.IsSuccessStatusCode)
-        {
-            throw new Exception(content);
-        }
+        var response = await client.GetAsync("/posts" + query);
+        var content = await response.Content.ReadAsStringAsync();
+        if (!response.IsSuccessStatusCode) throw new Exception(content);
 
-        ICollection<Post> posts = JsonSerializer.Deserialize<ICollection<Post>>(content, new JsonSerializerOptions
+        var posts = JsonSerializer.Deserialize<ICollection<Post>>(content, new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true
         })!;
         return posts;
     }
-    
-    
+
 
     public async Task<PostBasicDto> GetByIdAsync(int id)
     {
-        HttpResponseMessage response = await client.GetAsync($"/posts/{id}");
-        string content = await response.Content.ReadAsStringAsync();
-        if (!response.IsSuccessStatusCode)
-        {
-            throw new Exception(content);
-        }
+        var response = await client.GetAsync($"/posts/{id}");
+        var content = await response.Content.ReadAsStringAsync();
+        if (!response.IsSuccessStatusCode) throw new Exception(content);
 
-        PostBasicDto post = JsonSerializer.Deserialize<PostBasicDto>(content, new JsonSerializerOptions
+        var post = JsonSerializer.Deserialize<PostBasicDto>(content, new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true
         })!;
@@ -66,11 +58,8 @@ public class PostHttpClient : IPostService
 
     private static string ConstructQuery(string? userName, int? userId, string? titleContains)
     {
-        string query = "";
-        if (!string.IsNullOrEmpty(userName))
-        {
-            query += $"?username={userName}";
-        }
+        var query = "";
+        if (!string.IsNullOrEmpty(userName)) query += $"?username={userName}";
 
         if (userId != null)
         {

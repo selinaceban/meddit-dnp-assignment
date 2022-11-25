@@ -20,10 +20,7 @@ public class UserHttpClient : IUserService
     {
         var response = await client.PostAsJsonAsync("/login", dto);
         var result = await response.Content.ReadAsStringAsync();
-        if (!response.IsSuccessStatusCode)
-        {
-            throw new Exception(result);
-        }
+        if (!response.IsSuccessStatusCode) throw new Exception(result);
         var existing = JsonSerializer.Deserialize<User>(result, new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true
@@ -33,14 +30,11 @@ public class UserHttpClient : IUserService
 
     public async Task<User> CreateAsync(UserCreationDto dto)
     {
-        string userAsJson = JsonSerializer.Serialize(dto);
+        var userAsJson = JsonSerializer.Serialize(dto);
         StringContent content = new(userAsJson, Encoding.UTF8, "application/json");
         var response = await client.PostAsJsonAsync("/users", content);
         var result = await response.Content.ReadAsStringAsync();
-        if (!response.IsSuccessStatusCode)
-        {
-            throw new Exception(result);
-        }
+        if (!response.IsSuccessStatusCode) throw new Exception(result);
 
         var created = JsonSerializer.Deserialize<User>(result, new JsonSerializerOptions
         {
@@ -48,23 +42,17 @@ public class UserHttpClient : IUserService
         })!;
         return created;
     }
-    
+
 
     public async Task<IEnumerable<User>> GetUsers(string? usernameContains = null)
     {
-        string uri = "/users";
-        if (!string.IsNullOrEmpty(usernameContains))
-        {
-            uri += $"?username={usernameContains}";
-        }
-        HttpResponseMessage response = await client.GetAsync(uri);
-        string result = await response.Content.ReadAsStringAsync();
-        if (!response.IsSuccessStatusCode)
-        {
-            throw new Exception(result);
-        }
+        var uri = "/users";
+        if (!string.IsNullOrEmpty(usernameContains)) uri += $"?username={usernameContains}";
+        var response = await client.GetAsync(uri);
+        var result = await response.Content.ReadAsStringAsync();
+        if (!response.IsSuccessStatusCode) throw new Exception(result);
 
-        IEnumerable<User> users = JsonSerializer.Deserialize<IEnumerable<User>>(result, new JsonSerializerOptions
+        var users = JsonSerializer.Deserialize<IEnumerable<User>>(result, new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true
         })!;
