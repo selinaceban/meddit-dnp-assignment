@@ -12,13 +12,10 @@ public class PostContext : DbContext
     {
         optionsBuilder.UseSqlite("Data Source = ../EfcDataAccess/Post.db");
     }
-    
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<User>().HasKey(user => user.Id);
         modelBuilder.Entity<Post>().HasNoKey();
     }
-    
-    
-    
 }

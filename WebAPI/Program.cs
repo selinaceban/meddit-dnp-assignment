@@ -6,11 +6,8 @@ using Domain.Auth;
 using EfcDataAccess;
 using EfcDataAccess.DAOs;
 using FileData;
-using FileData.DAOs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using WebApi.Services;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,7 +35,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 {
     options.RequireHttpsMetadata = false;
     options.SaveToken = true;
-    options.TokenValidationParameters = new TokenValidationParameters()
+    options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = true,
         ValidateAudience = true,
@@ -68,7 +65,6 @@ app.UseCors(x => x
     .AllowAnyHeader()
     .SetIsOriginAllowed(origin => true) // allow any origin
     .AllowCredentials());
-
 
 
 app.UseHttpsRedirection();

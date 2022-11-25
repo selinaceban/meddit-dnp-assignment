@@ -9,5 +9,4 @@ public interface IPostService
     Task<ICollection<Post>> GetAsync(string? userName, int? userId, string? titleContains);
 
     Task<PostBasicDto> GetByIdAsync(int id);
-    
 }

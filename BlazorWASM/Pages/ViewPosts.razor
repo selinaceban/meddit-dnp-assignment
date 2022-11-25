@@ -1,8 +1,6 @@
 ﻿@page "/ViewPosts"
-@using Domain.Models
 @using HttpClients.ClientInterfaces
-@using UIComponents
-@using Domain.DTOs
+@using Domain.Models
 @inject IPostService postService
 @inject NavigationManager navMgr
 
@@ -55,7 +53,9 @@ else
             <tr>
                 <td>@item.Id</td>
                 <td>@item.Author.UserName</td>
-                <td ><button onclick="@GoToPost">@item.Title</button></td>
+                <td >
+                    <button onclick="@GoToPost">@item.Title</button>
+                </td>
             </tr>
         }
         </tbody>
@@ -69,7 +69,7 @@ else
 @code {
     private IEnumerable<Post>? posts;
     private string msg = "";
-    private bool doShowFilters = false;
+    private bool doShowFilters;
 
     private string? usernameFilter;
     private int? userIdFilter;
@@ -90,8 +90,6 @@ else
 
     private void GoToPost()
     {
-        
-        
         navMgr.NavigateTo("$/posts/{id}");
     }
 

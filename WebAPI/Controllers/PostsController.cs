@@ -1,15 +1,14 @@
 ﻿using Application.LogicInterfaces;
 using Domain.DTOs;
 using Domain.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers;
+
 [ApiController]
 [Route("[controller]")]
 public class PostsController : ControllerBase
 {
-
     private readonly IPostLogic postLogic;
 
     public PostsController(IPostLogic postLogic)
@@ -18,11 +17,11 @@ public class PostsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Post>> CreateAsync([FromBody]PostCreationDto dto)
+    public async Task<ActionResult<Post>> CreateAsync([FromBody] PostCreationDto dto)
     {
         try
         {
-            Post created = await postLogic.CreateAsync(dto);
+            var created = await postLogic.CreateAsync(dto);
             return Created($"/posts/{created.Id}", created);
         }
         catch (Exception e)
@@ -55,7 +54,7 @@ public class PostsController : ControllerBase
     {
         try
         {
-            PostBasicDto result = await postLogic.GetByIdAsync(id);
+            var result = await postLogic.GetByIdAsync(id);
             return Ok(result);
         }
         catch (Exception e)
@@ -64,6 +63,4 @@ public class PostsController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
-    
-
 }

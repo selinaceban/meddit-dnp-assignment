@@ -1,5 +1,4 @@
 ﻿using System.Security.Claims;
-using System.Text.Json;
 using BlazorWasm.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 
@@ -17,7 +16,7 @@ public class CustomAuthProvider : AuthenticationStateProvider
 
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
-        ClaimsPrincipal principal = await authService.GetAuthAsync();
+        var principal = await authService.GetAuthAsync();
 
         return new AuthenticationState(principal);
     }

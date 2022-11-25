@@ -1,6 +1,6 @@
 ﻿@page "/ViewUsers"
-@using Domain.Models
 @using HttpClients.ClientInterfaces
+@using Domain.Models
 @inject IUserService userService
 
 <h3 style="text-align: center">Overview of all users</h3>
@@ -23,7 +23,7 @@ else if (!users.Any())
 else
 {
     <div class="users-container">
-        @foreach (User user in users)
+        @foreach (var user in users)
         {
             <div class="user-card">
                 <label>@user.UserName</label>
@@ -49,5 +49,5 @@ else
             msg = e.Message;
         }
     }
-}
 
+}
