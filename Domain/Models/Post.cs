@@ -1,11 +1,16 @@
-﻿namespace Domain.Models;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Domain.Models;
 
 public class Post
 {
+ [Key]
     public int Id { get; set; }
-    public User Author { get; }
-    public string Title { get; }
+    public User Author { get; private set; }
+    [MaxLength(255)]
+    public string Title { get; private set; }
     
+    [MaxLength(2000)]
     public string Content { get; }
 
     public bool IsPosted { get; set; }
@@ -16,4 +21,6 @@ public class Post
         Title = title;
         Content = content;
     }
+    
+    private Post(){}
 }
